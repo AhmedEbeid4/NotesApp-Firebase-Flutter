@@ -35,7 +35,6 @@ class ApiService {
           Uri.parse("${Constants.baseUrl}/notes/${note.id!}.json") // url
       );
     }catch(e){
-      print(e.toString());
       return null;
     }
 
