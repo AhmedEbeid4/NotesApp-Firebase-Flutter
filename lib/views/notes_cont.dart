@@ -16,10 +16,14 @@ class NotesContainer extends StatefulWidget {
 }
 
 class _NotesContainerState extends State<NotesContainer> {
+  int _firstLength=-1;
   List<Note>? notes = [];
 
   void _getNotes() async {
     notes = await ApiService().getNotes();
+    if(notes != null){
+      _firstLength=notes!.length;
+    }
     setState(() {});
   }
   void _deleteNote(int index)async{
@@ -44,8 +48,9 @@ class _NotesContainerState extends State<NotesContainer> {
     return Scaffold(
       body: SafeArea(
         child: Container(
+          height: double.infinity,
           color: primaryColor,
-          child: notes == null || notes!.isEmpty
+          child: _firstLength == -1
               ? const Center(
                   child: CircularProgressIndicator(
                     color: itemBackgroundColor,
