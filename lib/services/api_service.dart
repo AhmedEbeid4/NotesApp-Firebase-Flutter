@@ -6,8 +6,8 @@ import 'package:http/http.dart' as http;
 import '../models/note.dart';
 
 class ApiService {
+
   Future<List<Note>?> getNotes() async {
-    print('in');
     try {
       http.Response response = await http
           .get(Uri.parse(Constants.baseUrl + Constants.notesEndPoint));
@@ -27,5 +27,17 @@ class ApiService {
         Uri.parse(Constants.baseUrl + Constants.notesEndPoint), // url
         body: jsonEncode(note.toJson()) // body
         );
+  }
+
+  Future<http.Response?> deleteNote(Note note)async{
+    try{
+      return http.delete(
+          Uri.parse("${Constants.baseUrl}/notes/${note.id!}.json") // url
+      );
+    }catch(e){
+      print(e.toString());
+      return null;
+    }
+
   }
 }

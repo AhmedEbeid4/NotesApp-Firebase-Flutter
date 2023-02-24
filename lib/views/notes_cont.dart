@@ -17,27 +17,27 @@ class NotesContainer extends StatefulWidget {
 
 class _NotesContainerState extends State<NotesContainer> {
   List<Note>? notes = [];
-  int _currLength = 0;
 
   void _getNotes() async {
     notes = await ApiService().getNotes();
-    if(notes != null && notes!.isNotEmpty){
-      _currLength = notes!.length;
-    }
-    setState(() {
-
-    });
+    setState(() {});
   }
+  void _deleteNote(int index)async{
+    var response = await ApiService().deleteNote(notes![index]);
+    if(response != null && response.statusCode == 200){
+      print('success');
+      notes?.removeAt(index);
+      setState(() {});
+    }
 
+  }
   @override
   void initState() {
-    if(notes == null || notes!.isEmpty){
+    if (notes == null || notes!.isEmpty) {
       _getNotes();
     }
     super.initState();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -52,43 +52,62 @@ class _NotesContainerState extends State<NotesContainer> {
                   ),
                 )
               : SingleChildScrollView(
-                child: Column(
-                  children: [
-                    SizedBox(height: 10.h,),
-                    const Text(yourNotesText,style: TextStyle(fontSize: 28,color: secondaryColor ),),
-                    SizedBox(height: 10.h,),
-                    ListView.builder(
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      const Text(
+                        yourNotesText,
+                        style: TextStyle(fontSize: 28, color: secondaryColor),
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: notes?.length,
                         itemBuilder: (context, index) {
                           var item = NoteItem(
-                                          item: notes![index], onClick: () {
-
-                                          }, onDelete: () {
-
-                                          }
-                                    );
-                          if(index == notes!.length-1){
+                              item: notes![index],
+                              onClick: () {
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(builder: (_) {
+                                  return AddItemScreen(
+                                    forAdd: false,
+                                    note: notes![index],
+                                  );
+                                }));
+                              },
+                              onDelete: (){
+                                _deleteNote(index);
+                              });
+                          if (index == notes!.length - 1) {
                             return Column(
                               children: [
                                 item,
-                                SizedBox(height: 70.h,)
+                                SizedBox(
+                                  height: 70.h,
+                                )
                               ],
                             );
                           }
                           return item;
                         },
                       ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
-              return AddItemScreen();
+            Navigator.of(context)
+                .pushReplacement(MaterialPageRoute(builder: (_) {
+              return AddItemScreen(
+                forAdd: true,
+              );
             }));
           },
           backgroundColor: secondaryColor,
