@@ -40,6 +40,7 @@ class AddItemScreen extends StatelessWidget {
             )
         );
       }, icon: const Icon(Icons.keyboard_backspace)),
+      SizedBox(height: 50.h,),
       RoundedTextField(
         label: titleString,
         controller: titleController,
@@ -50,9 +51,9 @@ class AddItemScreen extends StatelessWidget {
         controller: contentController,
         minLines: 17,
       ),
-      const Expanded(
-        child: SizedBox(),
-      ),
+
+      SizedBox(height: 50.h,),
+
       SizedBox(
         width: double.infinity,
         child: ElevatedButton(
@@ -97,10 +98,10 @@ class AddItemScreen extends StatelessWidget {
       SizedBox(height: 20.h,),
       Text(descriptionString,style: TextStyle(fontSize: 20.sp,color: itemBackgroundColor)),
       SizedBox(height: 20.h,),
-      Expanded(child: SizedBox(
+      SizedBox(
         width: double.infinity,
         child: Text(note!.content,style: TextStyle(fontSize: 25.sp,color: secondaryColor)),
-      )),
+      ),
       SizedBox(height: 20.h,),
     ];
   }
@@ -108,14 +109,16 @@ class AddItemScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Container(
           color: primaryColor,
+          height: double.infinity,
           padding: EdgeInsets.symmetric(vertical: 10.h,horizontal: 5.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: forAdd?forAdding(context):forShowing(context),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: forAdd?forAdding(context):forShowing(context),
+            ),
           ),
         ),
       ),
